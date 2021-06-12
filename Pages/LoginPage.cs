@@ -25,7 +25,7 @@ namespace Kinopoisk.Pages
         {
             loginTextField.SendKeys(BrowserConfig.Login);
             loginSignInButton.Click();
-            _browser.Page.ExplicitWait();
+
             passwordTextField.SendKeys(BrowserConfig.Password);
             loginSignInButton.Click();
             return new HomePage(_browser);
