@@ -1,5 +1,6 @@
 ﻿using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Kinopoisk.Core.Browser
 {
@@ -18,5 +19,7 @@ namespace Kinopoisk.Core.Browser
         public T Driver { get; }
 
         public IPage Page => _page;
+
+        public IWait<IWebDriver> _wait { get; }
     }
 }

@@ -25,17 +25,21 @@ namespace Kinopoisk.Pages
             return new LoginPage(_browser);
         }
 
-        public void ClickLogin() => loginButton.Click();
+        public void ClickLogin() => _browser.Page.Click(loginButton);
         public void Logout()
         {
-            Actions ac = new Actions(_browser.Page);
-            ac.MoveToElement(userProfile).Build().Perform();
-            logoutButton.Click();
+            _browser.Page.MoveToElement(userProfile);
+            _browser.Page.Click(logoutButton);
         }
 
         public bool IsUserLoggedIn() 
         {
-            return _browser.Page.FindElements(By.XPath("//button[contains(text(), 'Войти')]")).Count <= 0;
+            return !_browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Войти')]"));
+        }
+
+        public bool IsUserLoggedOut()
+        {
+            return !_browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
         }
 
     }

@@ -1,6 +1,8 @@
 ﻿using Kinopoisk.Core.Browser;
 using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using Wait = SeleniumExtras.WaitHelpers;
 
 namespace Kinopoisk.Pages
@@ -23,11 +25,11 @@ namespace Kinopoisk.Pages
         /// </summary>
         public HomePage Login()
         {
-            loginTextField.SendKeys(BrowserConfig.Login);
-            loginSignInButton.Click();
-
-            passwordTextField.SendKeys(BrowserConfig.Password);
-            loginSignInButton.Click();
+            _browser.Page.Type(BrowserConfig.Login, loginTextField);
+            _browser.Page.Click(loginSignInButton);
+            _browser.Page.IsElementPresent(By.Id("passp-field-passwd"));
+            _browser.Page.Type(BrowserConfig.Password, passwordTextField);
+            _browser.Page.Click(loginSignInButton);
             return new HomePage(_browser);
         }
     }

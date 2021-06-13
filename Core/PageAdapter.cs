@@ -1,6 +1,8 @@
 ﻿using Kinopoisk.Core.Browser;
+using Kinopoisk.Core.Helpers;
 using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.ObjectModel;
@@ -14,10 +16,14 @@ namespace Kinopoisk
         private readonly T _driver;
         private readonly IWait<IWebDriver> _wait;
 
-        public PageAdapter(BrowserAdapter<T> browser)
+        public PageAdapter(BrowserAdapter<T> browser, int waitFor = 15000, int pollingInterval = 200)
         {
             _browser = browser;
             _driver = browser.Driver;
+            _wait = new WebDriverWait(_driver, TimeSpan.FromMilliseconds(waitFor))
+            {
+                PollingInterval = TimeSpan.FromMilliseconds(pollingInterval)
+            };
         }
 
         public string Title => _driver.Title;
@@ -89,25 +95,87 @@ namespace Kinopoisk
             _driver.Manage().Timeouts().ImplicitWait = implicitWait;
         }
 
-        public void ExplicitWait(Func<IWebDriver, bool> expectedCondition, string failureMessage)
+        /// <summary>
+        /// Clicks on an element
+        /// </summary>
+        /// <param name="element">Element to be clicked</param>
+        public void Click(IWebElement element)
         {
-            var implicitWait = _wait.Timeout;
-            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
-
-            try
+            if (element == null)
             {
-                _wait.Until(condition: expectedCondition);
-            }
-            catch (WebDriverTimeoutException e)
-            {
-                throw new TimeoutException(
-                    message: $"Waited for {_wait.Timeout} seconds for: {failureMessage}",
-                    innerException: e);
+                throw new ArgumentNullException(nameof(element));
             }
 
-            _driver.Manage().Timeouts().ImplicitWait = implicitWait;
+            ExplicitWait(
+                Wait.ExpectedConditions.ElementToBeClickable(element),
+                $"Button ID={element.GetAttribute("id")} to be clickable");
+
+            element.Click();
         }
 
+        /// <summary>
+        /// Type into text field
+        /// </summary>
+        /// <param name="value">String text to type</param>
+        /// <param name="element">Webelement to type in</param>
+        public void Type(string value, IWebElement element)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), "Cannot type a null value.");
+            }
+
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element), "Cannot type on a null element.");
+            }
+
+            ExplicitWait(Wait.ExpectedConditions.ElementToBeClickable(element),
+                $"Textbox ID={element.GetAttribute("id")} to be click-able");
+            WaitHelper.PollingWait(() => element.Enabled, failureMessage: "Text box to be enabled");
+
+            element.SendKeys(value.Trim());
+        }
+
+        /// <summary>
+        /// Move mouse to webelement
+        /// </summary>
+        /// <param name="element">Webelement to hover over</param>
+        public void MoveToElement(IWebElement element)
+        {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element), "Cannot move to a null element.");
+            }
+
+            Actions actions = new Actions(_driver);
+            actions.MoveToElement(element).Build().Perform();
+        }
+
+        //public void ExplicitWait(Func<IWebDriver, bool> expectedCondition, string failureMessage)
+        //{
+        //    var implicitWait = _wait.Timeout;
+        //    _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+
+        //    try
+        //    {
+        //        _wait.Until(condition: expectedCondition);
+        //    }
+        //    catch (WebDriverTimeoutException e)
+        //    {
+        //        throw new TimeoutException(
+        //            message: $"Waited for {_wait.Timeout} seconds for: {failureMessage}",
+        //            innerException: e);
+        //    }
+
+        //    _driver.Manage().Timeouts().ImplicitWait = implicitWait;
+        //}
+
+        /// <summary>
+        /// Check if element is present on the page
+        /// </summary>
+        /// <param name="condition">Locator type and path</param>
+        /// <returns></returns>
         public bool IsElementPresent(By condition)
         {
             var implicitWait = _wait.Timeout;
@@ -125,6 +193,7 @@ namespace Kinopoisk
             }
             finally
             {
+                _wait.Timeout = implicitWait;
                 _driver.Manage().Timeouts().ImplicitWait = implicitWait;
             }
         }

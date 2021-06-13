@@ -2,7 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 
@@ -17,18 +16,12 @@ namespace Kinopoisk.Core.Browser
         {
             _browsers.Add(BrowserType.Chrome, Chrome);
             _browsers.Add(BrowserType.Firefox, Firefox);
-            _browsers.Add(BrowserType.Remote, Remote);
         }
 
         public IBrowser Create<T>() where T : IWebDriver
         {
             var factoryMethod = this as IBrowserWebDriver<T>;
             return factoryMethod?.Create();
-        }
-
-        private IBrowser Remote()
-        {
-            return Create<RemoteWebDriver>();
         }
 
         private IBrowser Chrome()
@@ -43,13 +36,15 @@ namespace Kinopoisk.Core.Browser
 
         public IBrowser GetBrowser(BrowserType type)
         {
-            return BrowserConfig.RemoteBrowser && BrowserConfig.UseSauceLabs ||
-                   BrowserConfig.RemoteBrowser && BrowserConfig.UseBrowserstack ||
-                   BrowserConfig.RemoteBrowser && BrowserConfig.UseSeleniumGrid
-                ? _browsers[BrowserType.Remote].Invoke()
-                : (_browsers.ContainsKey(type)
-                    ? _browsers[type].Invoke()
-                    : _browsers[BrowserType.Firefox].Invoke());
+            switch (type)
+            {
+                case BrowserType.Firefox:
+                    return _browsers[BrowserType.Firefox].Invoke();
+                case BrowserType.Chrome:
+                    return _browsers[BrowserType.Chrome].Invoke();
+                default:
+                    return _browsers[BrowserType.Chrome].Invoke();
+            }
         }
     }
 }

@@ -21,6 +21,10 @@ namespace Kinopoisk.Core.Interfaces
         new IOptions Manage();
         new INavigation Navigate();
         new ITargetLocator SwitchTo();
-        //void ExplicitWait(Func<IWebDriver, IWebElement> expectedCondition, string failureMessage);
+        void ExplicitWait(Func<IWebDriver, IWebElement> expectedCondition, string failureMessage);
+        bool IsElementPresent(By condition);
+        void Click(IWebElement element);
+        void Type(string value, IWebElement element);
+        void MoveToElement(IWebElement element);
     }
 }

@@ -20,8 +20,8 @@ namespace Kinopoisk
         {
             var loginPage = _homePage.OpenLoginPage();
             var homePageLoggedIn = loginPage.Login();
-
-            Assert.IsTrue(homePageLoggedIn.IsUserLoggedIn());
+            homePageLoggedIn.Logout();
+            Assert.IsTrue(homePageLoggedIn.IsUserLoggedOut());
 
         }
     }
