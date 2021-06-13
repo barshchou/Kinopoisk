@@ -11,11 +11,11 @@ namespace Kinopoisk.Tests
         public void SearchContentByNameTest()
         {
             var loginPage = _homePage.OpenLoginPage();
-            var homePageLoggedIn = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
+            var homePage = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
+            var searchResults = homePage.SearchContent("Троя");
 
 
-
-            Assert.IsTrue(homePageLoggedIn.IsUserLoggedIn());
+            Assert.IsTrue(searchResults.AreSearchResultsDisplayed("Троя"));
         }
     }
 }
