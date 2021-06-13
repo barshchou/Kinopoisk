@@ -23,14 +23,24 @@ namespace Kinopoisk.Pages
         /// <summary>
         /// Fill in login fields and log in
         /// </summary>
-        public HomePage Login()
+        public void Login(string login, string password)
         {
-            _browser.Page.Type(BrowserConfig.Login, loginTextField);
+            _browser.Page.Type(login, loginTextField);
             _browser.Page.Click(loginSignInButton);
-            _browser.Page.IsElementPresent(By.Id("passp-field-passwd"));
-            _browser.Page.Type(BrowserConfig.Password, passwordTextField);
+            _browser.Page.WaitUntilElementIsPresent(By.Id("passp-field-passwd"));
+            _browser.Page.Type(password, passwordTextField);
             _browser.Page.Click(loginSignInButton);
+        }
+
+        public HomePage OpenHomePage(string login, string password)
+        {
+            Login(login, password);
             return new HomePage(_browser);
+        }
+
+        public bool AreCredentialsInvalid()
+        {
+            return _browser.Page.WaitElementIsPresent(By.XPath("//div[contains(@class, 'Textinput-Hint_state_error')]"));
         }
     }
 }

@@ -1,4 +1,6 @@
+using Kinopoisk.Core.Browser;
 using NUnit.Framework;
+using System;
 
 namespace Kinopoisk
 {
@@ -7,21 +9,30 @@ namespace Kinopoisk
     public class LoginTests : TestBase
     {
         [Test]
-        public void LoginTest()
+        public void SuccessfullLoginTest()
         {
             var loginPage = _homePage.OpenLoginPage();
-            var homePageLoggedIn = loginPage.Login();
+            var homePageLoggedIn = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
             
             Assert.IsTrue(homePageLoggedIn.IsUserLoggedIn());
+        }
+
+        [Test]
+        public void UnsuccessfullLoginTest()
+        {
+            var loginPage = _homePage.OpenLoginPage();
+            loginPage.Login(BrowserConfig.Login, "InvalidPassword");
+            
+            Assert.IsTrue(loginPage.AreCredentialsInvalid());
         }
 
         [Test]
         public void LogoutTest()
         {
             var loginPage = _homePage.OpenLoginPage();
-            var homePageLoggedIn = loginPage.Login();
+            var homePageLoggedIn = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
             homePageLoggedIn.Logout();
-            Assert.IsTrue(homePageLoggedIn.IsUserLoggedOut());
+            Assert.IsFalse(homePageLoggedIn.IsUserLoggedIn());
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using Kinopoisk.Core.Interfaces;
+﻿using Kinopoisk.Core.Helpers;
+using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System;
@@ -13,6 +14,7 @@ namespace Kinopoisk.Pages
         public HomePage(IBrowser browser)
         {
             _browser = browser;
+            _browser.Page.WaitUntilElementIsPresent(By.XPath("//div[@class = 'desktop-layout-with-sidebar__content']"));
         }
 
         private IWebElement loginButton => _browser.Page.FindElement(By.XPath("//button[contains(text(), 'Войти')]"));
@@ -21,6 +23,9 @@ namespace Kinopoisk.Pages
 
         public LoginPage OpenLoginPage()
         {
+            if (IsUserLoggedIn())
+                Logout();
+
             ClickLogin();
             return new LoginPage(_browser);
         }
@@ -28,19 +33,16 @@ namespace Kinopoisk.Pages
         public void ClickLogin() => _browser.Page.Click(loginButton);
         public void Logout()
         {
-            _browser.Page.MoveToElement(userProfile);
-            _browser.Page.Click(logoutButton);
+            if (IsUserLoggedIn())
+            {
+                _browser.Page.MoveToElement(userProfile);
+                _browser.Page.Click(logoutButton);
+            }
         }
 
         public bool IsUserLoggedIn() 
         {
-            return !_browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Войти')]"));
+            return _browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
         }
-
-        public bool IsUserLoggedOut()
-        {
-            return !_browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
-        }
-
     }
 }

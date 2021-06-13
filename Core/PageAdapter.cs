@@ -176,7 +176,7 @@ namespace Kinopoisk
         /// </summary>
         /// <param name="condition">Locator type and path</param>
         /// <returns></returns>
-        public bool IsElementPresent(By condition)
+        public bool WaitUntilElementIsPresent(By condition)
         {
             var implicitWait = _wait.Timeout;
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
@@ -196,6 +196,61 @@ namespace Kinopoisk
                 _wait.Timeout = implicitWait;
                 _driver.Manage().Timeouts().ImplicitWait = implicitWait;
             }
+        }
+
+        public bool IsElementPresent(By condition)
+        {
+            var implicitWait = _wait.Timeout;
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+
+            try
+            {
+                return _driver.FindElements(condition).Count > 0;
+            }
+            catch (WebDriverException)
+            {
+                return false;
+            }
+            finally
+            {
+                _wait.Timeout = implicitWait;
+                _driver.Manage().Timeouts().ImplicitWait = implicitWait;
+            }
+        }
+
+        public bool IsElementPresent(By condition, out bool isPresent)
+        {
+            isPresent = false;
+            var implicitWait = _wait.Timeout;
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+
+            try
+            {
+                return isPresent =_driver.FindElements(condition).Count > 0;
+            }
+            catch (WebDriverException)
+            {
+                return isPresent;
+            }
+            finally
+            {
+                _wait.Timeout = implicitWait;
+                _driver.Manage().Timeouts().ImplicitWait = implicitWait;
+            }
+        }
+
+        public bool WaitElementIsPresent(By condition)
+        {
+            bool isPresent = false;
+            var implicitWait = _wait.Timeout;
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(0);
+
+            WaitHelper.PollingWait(() => IsElementPresent(condition, out isPresent),
+                    timeoutMilliseconds: 10 * 1000
+                    );
+
+            _driver.Manage().Timeouts().ImplicitWait = implicitWait;
+            return isPresent;
         }
 
         public string Url { get; set; }

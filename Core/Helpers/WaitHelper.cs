@@ -235,7 +235,7 @@ namespace Kinopoisk.Core.Helpers
         /// </summary>
         /// <param name="element">Instance of IWebElement.</param>
         /// <returns>True if element displayed.</returns>
-        private static bool IsElementDisplayed(IWebElement element)
+        public static bool IsElementDisplayed(IWebElement element)
         {
             if (element == null) throw new ArgumentNullException(paramName: nameof(element));
 
@@ -254,7 +254,7 @@ namespace Kinopoisk.Core.Helpers
         /// </summary>
         /// <param name="element">Instance of IWebElement.</param>
         /// <returns>True if element clickable.</returns>
-        private static bool IsElementClickable(IWebElement element)
+        public static bool IsElementClickable(IWebElement element)
         {
             if (element == null) throw new ArgumentNullException(paramName: nameof(element));
 
@@ -288,7 +288,7 @@ namespace Kinopoisk.Core.Helpers
         /// Delay of time before call method which check that element state stable at that moment.
         /// </param>
         /// <returns>True if element state was stable during all period of time.</returns>
-        private static bool IsElementStateStable(IWebElement element, int periodMilliseconds, int delayTimeoutMilliseconds)
+        public static bool IsElementStateStable(IWebElement element, int periodMilliseconds, int delayTimeoutMilliseconds)
         {
             if (element == null) throw new ArgumentNullException(paramName: nameof(element));
 
@@ -328,7 +328,7 @@ namespace Kinopoisk.Core.Helpers
         /// Delay of time before call method which check that element state stable at that moment.
         /// </param>
         /// <returns>True if elements quantity correct during time period.</returns>
-        private static bool AreElementsQuantityCorrectDuringTimePeriod(
+        public static bool AreElementsQuantityCorrectDuringTimePeriod(
             List<IWebElement> elements,
             int quantity,
             int periodMilliseconds,
