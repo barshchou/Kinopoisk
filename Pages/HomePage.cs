@@ -50,10 +50,7 @@ namespace Kinopoisk.Pages
             }
         }
 
-        public bool IsUserLoggedIn() 
-        {
-            return _browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
-        }
+        public bool IsUserLoggedIn()  => _browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
 
         public void Search(string contentName)
         {

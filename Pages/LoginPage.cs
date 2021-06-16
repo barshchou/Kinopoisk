@@ -38,9 +38,7 @@ namespace Kinopoisk.Pages
             return new HomePage(_browser);
         }
 
-        public bool AreCredentialsInvalid()
-        {
-            return _browser.Page.WaitElementIsPresent(By.XPath("//div[contains(@class, 'Textinput-Hint_state_error')]"));
-        }
+        public bool AreCredentialsInvalid() => _browser.Page.WaitElementIsPresent(By.XPath("//div[contains(@class, 'Textinput-Hint_state_error')]"));
+
     }
 }
