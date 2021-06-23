@@ -19,9 +19,10 @@ namespace Kinopoisk.Pages
 
         private IWebElement loginButton => _browser.Page.FindElement(By.XPath("//button[contains(text(), 'Войти')]"));
         private IWebElement logoutButton => _browser.Page.FindElement(By.XPath("//button[contains(text(), 'Выйти')]"));
-        private IWebElement userProfile => _browser.Page.FindElement(By.XPath("//div[contains(@class, 'header-v4__user-bar')]/div/button"));
+        private IWebElement userProfileMenu => _browser.Page.FindElement(By.XPath("//div[contains(@class, 'header-v4__user-bar')]/div/button"));
         private IWebElement searchContentField => _browser.Page.FindElement(By.CssSelector("input[name='kp_query']"));
         private IWebElement searchButton => _browser.Page.FindElement(By.XPath("//button[@type='submit']"));
+        private IWebElement profileSettingButton => _browser.Page.FindElement(By.XPath("//a[contains(text(), 'Настройки')]"));
         private IWebElement searchResultsSuggested(string contentName) => _browser.Page.FindElement(
             By.XPath($"//div/h4[text() = '{contentName}']"));
 
@@ -41,23 +42,46 @@ namespace Kinopoisk.Pages
         }
 
         public void ClickLogin() => _browser.Page.Click(loginButton);
+
+        /// <summary>
+        /// Logout if already logged in
+        /// </summary>
         public void Logout()
         {
             if (IsUserLoggedIn())
             {
-                _browser.Page.MoveToElement(userProfile);
+                _browser.Page.MoveToElement(userProfileMenu);
                 _browser.Page.Click(logoutButton);
             }
         }
 
+        /// <summary>
+        /// Navigate to Profile page
+        /// </summary>
+        /// <returns></returns>
+        public ProfilePage OpenProfilePage()
+        {
+            _browser.Page.MoveToElement(userProfileMenu);
+            _browser.Page.Click(profileSettingButton);
+            return new ProfilePage(_browser);
+        }
+
         public bool IsUserLoggedIn()  => _browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
 
+        /// <summary>
+        /// Search content from search field box
+        /// </summary>
+        /// <param name="contentName"></param>
         public void Search(string contentName)
         {
             _browser.Page.Type(contentName, searchContentField);
             _browser.Page.Click(searchButton);
         }
 
+        /// <summary>
+        /// Search content and and open content page from suggested list
+        /// </summary>
+        /// <param name="contentName"></param>
         public void SearchSuggestedContent(string contentName)
         {
             _browser.Page.Type(contentName, searchContentField);

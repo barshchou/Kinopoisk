@@ -20,11 +20,8 @@ namespace Kinopoisk.Tests
             
             Assert.IsTrue(mediaContentPage.IsContentAddedToFavorites());
             var moviesPages = mediaContentPage.OpenFavoritesFolder();
-            
             Assert.IsTrue(moviesPages.IsContentAddedToFavorites(contentName));
-
             moviesPages.RemoveAllFavourites();
-
             Assert.IsTrue(moviesPages.IsFavoritesPurged());
         }
 
@@ -37,9 +34,7 @@ namespace Kinopoisk.Tests
                 .SearchContent(contentName)
                 .OpenContentItem(contentName);
             mediaContentPage.AddContentToWatched();
-
             Assert.IsTrue(mediaContentPage.IsContentAddedToWatched());
-
             Assert.IsTrue(mediaContentPage.OpenHomePage().SearchContent(contentName).OpenContentItem(contentName).IsContentAddedToWatched());
         }
 
@@ -52,9 +47,9 @@ namespace Kinopoisk.Tests
                 .SearchContent(contentName)
                 .OpenContentItem(contentName);
             mediaContentPage.OpenTrailer();
-
+            mediaContentPage.WaitTrailerAds();
+            mediaContentPage.PlayPauseTrailer();
             Assert.IsTrue(mediaContentPage.IsTrailerPlayerDisplayed());
-
             mediaContentPage.CloseTrailerFrame();
         }
     }

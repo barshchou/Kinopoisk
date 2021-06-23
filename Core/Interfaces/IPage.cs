@@ -25,9 +25,11 @@ namespace Kinopoisk.Core.Interfaces
         bool WaitUntilElementIsPresent(By condition);
         bool IsElementPresent(By condition);
         bool IsElementPresent(By condition, out bool isPresent);
-        bool WaitElementIsPresent(By condition);
+        bool WaitElementIsPresent(By condition, int timeout = 10000);
         void Click(IWebElement element);
-        void Type(string value, IWebElement element);
+        void Type(string value, IWebElement element, bool clear = false);
+        void Select(IWebElement element, string value, MatchCondition matchCondition = MatchCondition.Text);
+        void Clear(IWebElement element);
         void MoveToElement(IWebElement element);
     }
 }

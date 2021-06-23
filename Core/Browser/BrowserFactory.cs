@@ -32,45 +32,5 @@ namespace Kinopoisk
             service.FirefoxBinaryPath = @"C:\Program Files (x86)\Mozilla Firefox\firefox.exe";
             return new BrowserAdapter<FirefoxDriver>(new FirefoxDriver(service), BrowserType.Firefox);
         }
-
-        // TODO - Fix Remote WebDriver
-        //IBrowser<RemoteWebDriver> IBrowserWebDriver<RemoteWebDriver>.Create()
-        //{
-        //    DesiredCapabilities capabilities;
-        //    var gridUrl = BrowserConfig.GridHubUri;
-
-        //    switch (BrowserConfig.Browser)
-        //    {
-        //        case BrowserType.Chrome:
-        //            capabilities = new DesiredCapabilities();
-        //            break;
-        //        case BrowserType.Firefox:
-        //            capabilities = new DesiredCapabilities();
-        //            break;
-        //        default:
-        //            throw new ArgumentOutOfRangeException();
-        //    }
-
-        //    if (BrowserConfig.RemoteBrowser && BrowserConfig.UseSauceLabs)
-        //    {
-        //        capabilities.SetCapability(CapabilityType.Version, "50");
-        //        capabilities.SetCapability(CapabilityType.Platform, "Windows 10");
-        //        capabilities.SetCapability("username", BrowserConfig.SauceLabsUsername);
-        //        capabilities.SetCapability("accessKey", BrowserConfig.SauceLabsAccessKey);
-        //        gridUrl = BrowserConfig.SauceLabsHubUri;
-        //    }
-        //    else if (BrowserConfig.RemoteBrowser && BrowserConfig.UseBrowserstack)
-        //    {
-        //        capabilities.SetCapability(CapabilityType.Version, "50");
-        //        capabilities.SetCapability(CapabilityType.Platform, "Windows 10");
-        //        capabilities.SetCapability("username", BrowserConfig.BrowserStackUsername);
-        //        capabilities.SetCapability("accessKey", BrowserConfig.BrowserStackAccessKey);
-        //        gridUrl = BrowserConfig.BrowserStackHubUrl;
-        //    }
-
-        //    return
-        //        new BrowserAdapter<RemoteWebDriver>(
-        //            new RemoteWebDriver(new Uri(gridUrl), capabilities), BrowserType.Remote);
-        //}
     }
 }

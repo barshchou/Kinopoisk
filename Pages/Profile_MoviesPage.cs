@@ -31,10 +31,7 @@ namespace Kinopoisk.Pages
             _browser.Page.SwitchTo().Alert().Accept();
         }
 
-        public bool IsFavoritesPurged()
-        {
-            return _browser.Page.WaitUntilElementIsPresent(By.XPath("//p[@class = 'emptyMessage']"));
-        }
+        public bool IsFavoritesPurged() => _browser.Page.WaitUntilElementIsPresent(By.XPath("//p[@class = 'emptyMessage']"));
 
         public MediaContentPage OpenContenItem(string contentName)
         {

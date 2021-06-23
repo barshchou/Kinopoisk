@@ -8,7 +8,7 @@ namespace Kinopoisk.Tests
     [Parallelizable]
     public class HomePageTests : TestBase
     {
-        [Test]
+        [TestCase]
         public void SearchContentByNameTest()
         {
             var loginPage = _homePage.OpenLoginPage();
@@ -18,7 +18,7 @@ namespace Kinopoisk.Tests
             Assert.IsTrue(searchResults.AreSearchResultsDisplayed("Троя"));
         }
 
-        [Test]
+        [TestCase]
         public void SearchContentByName_NoResultsTest()
         {
             var contentName = RandomNameGenerator.RandomString();
@@ -29,7 +29,7 @@ namespace Kinopoisk.Tests
             Assert.False(searchResults.AreSearchResultsDisplayed(contentName));
         }
 
-        [Test]
+        [TestCase]
         public void SearchContentByName_TranslitTest()
         {
             var loginPage = _homePage.OpenLoginPage();
@@ -39,7 +39,7 @@ namespace Kinopoisk.Tests
             Assert.True(searchResults.AreSearchResultsDisplayed("Троя"));
         }
 
-        [Test]
+        [TestCase]
         public void SearchContentByName_WrongLanguageTest()
         {
             var loginPage = _homePage.OpenLoginPage();

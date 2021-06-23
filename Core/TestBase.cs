@@ -13,8 +13,8 @@ namespace Kinopoisk
         protected IBrowser Driver;
         protected HomePage _homePage { get; set; }
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
             Driver = _factory.Value.GetBrowser(BrowserConfig.Browser);
             Driver.Page.Manage().Window.Maximize();
@@ -22,8 +22,8 @@ namespace Kinopoisk
             _homePage = new HomePage(Driver);
         }
 
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
+        [TearDown]
+        public void TearDown()
         {
             Driver.Page.Quit();
         }
