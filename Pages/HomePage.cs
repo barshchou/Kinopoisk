@@ -1,9 +1,5 @@
-﻿using Kinopoisk.Core.Helpers;
-using Kinopoisk.Core.Interfaces;
+﻿using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using System;
-using System.Collections.Generic;
 
 namespace Kinopoisk.Pages
 {
