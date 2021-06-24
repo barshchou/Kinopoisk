@@ -23,6 +23,7 @@ namespace Kinopoisk.Pages
         private IWebElement searchContentField => _browser.Page.FindElement(By.CssSelector("input[name='kp_query']"));
         private IWebElement searchButton => _browser.Page.FindElement(By.XPath("//button[@type='submit']"));
         private IWebElement profileSettingButton => _browser.Page.FindElement(By.XPath("//a[contains(text(), 'Настройки')]"));
+        private IWebElement advancedSearchButton => _browser.Page.FindElement(By.XPath("//a[@aria-label = 'advanced-search']"));
         private IWebElement searchResultsSuggested(string contentName) => _browser.Page.FindElement(
             By.XPath($"//div/h4[text() = '{contentName}']"));
 
@@ -86,6 +87,12 @@ namespace Kinopoisk.Pages
         {
             _browser.Page.Type(contentName, searchContentField);
             _browser.Page.Click(searchResultsSuggested(contentName));
+        }
+
+        public SearchContentPage OpenSearchContentPage()
+        {
+            _browser.Page.Click(advancedSearchButton);
+            return new SearchContentPage(_browser);
         }
     }
 }

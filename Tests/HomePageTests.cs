@@ -48,5 +48,19 @@ namespace Kinopoisk.Tests
 
             Assert.True(searchResults.AreSearchResultsDisplayed("Троя"));
         }
+
+        [TestCase]
+        public void SearchByFilterTest()
+        {
+            var country = "Россия";
+            var yearTo = "2020";
+            var yearFrom = "2010";
+            var loginPage = _homePage.OpenLoginPage();
+            var searchContentPage = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password).OpenSearchContentPage();
+            var searchResultsPage = searchContentPage.SearchContentByFilter(country, yearFrom, yearTo);
+
+            Assert.IsTrue(searchResultsPage.IsSearchResultsFilteredByCountry(country));
+            Assert.IsTrue(searchResultsPage.IsSearchResultsFilteredByYear(yearFrom, yearTo));
+        }
     }
 }
