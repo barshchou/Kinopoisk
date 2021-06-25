@@ -1,5 +1,5 @@
-﻿using Kinopoisk.Core;
-using Kinopoisk.Core.Browser;
+﻿using Kinopoisk.Core.Browser;
+using Kinopoisk.Core.Enums;
 using Kinopoisk.Core.Helpers;
 using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;

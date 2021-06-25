@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Kinopoisk.Core.Enums;
+using OpenQA.Selenium;
 
 namespace Kinopoisk.Core.Interfaces
 {

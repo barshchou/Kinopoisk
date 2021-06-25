@@ -1,12 +1,11 @@
-﻿using Kinopoisk.Core.Browser;
+﻿using Kinopoisk.Core.Enums;
 using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Remote;
 using System;
 using System.IO;
 
-namespace Kinopoisk
+namespace Kinopoisk.Core.Browser
 {
     public sealed class BrowserFactory : 
         AbstractFactory,

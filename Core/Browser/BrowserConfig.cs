@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Kinopoisk.Core.Enums;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 

@@ -1,6 +1,5 @@
 using Kinopoisk.Core.Browser;
 using NUnit.Framework;
-using System;
 
 namespace Kinopoisk
 {

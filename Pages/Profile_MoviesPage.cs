@@ -1,9 +1,6 @@
 ﻿using Kinopoisk.Core.Browser;
 using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kinopoisk.Pages
 {

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Kinopoisk.Core.Enums;
+using OpenQA.Selenium;
 using System;
 using System.Collections.ObjectModel;
 
