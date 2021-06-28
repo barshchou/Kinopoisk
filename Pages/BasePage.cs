@@ -1,90 +1,27 @@
-﻿using Kinopoisk.Core.Browser;
+﻿using Kinopoisk.Core.Driver;
 using Kinopoisk.Core.Enums;
 using Kinopoisk.Core.Helpers;
-using Kinopoisk.Core.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.ObjectModel;
 using Wait = SeleniumExtras.WaitHelpers;
 
-namespace Kinopoisk
+namespace Kinopoisk.Pages
 {
-    public class PageAdapter<T> : IPage where T : IWebDriver
+    public class BasePage
     {
-        private readonly BrowserAdapter<T> _browser;
-        private readonly T _driver;
-        private readonly IWait<IWebDriver> _wait;
-
-        public PageAdapter(BrowserAdapter<T> browser, int waitFor = 15000, int pollingInterval = 200)
+        public IWebDriver _driver;
+        public IWait<IWebDriver> _wait;
+        public BasePage(IWebDriver driver, IWait<IWebDriver> wait)
         {
-            _browser = browser;
-            _driver = browser.Driver;
-            _wait = new WebDriverWait(_driver, TimeSpan.FromMilliseconds(waitFor))
-            {
-                PollingInterval = TimeSpan.FromMilliseconds(pollingInterval)
-            };
+            _driver = driver;
+            _wait = wait;
         }
 
-        public string Title => _driver.Title;
-        public string PageSource => _driver.PageSource;
-        public string CurrentWindowHandle => _driver.CurrentWindowHandle;
-        public ReadOnlyCollection<string> WindowHandles => _driver.WindowHandles;
-
-        public void GoToUrl(string url)
+        public BasePage()
         {
-            _driver.Navigate().GoToUrl(url);
-        }
 
-        public ReadOnlyCollection<IWebElement> FindElements(By by)
-        {
-            return _driver.FindElements(by);
-        }
-
-        public void NavigateBack()
-        {
-            _driver.Navigate().Back();
-        }
-
-        public void Refresh()
-        {
-            _driver.Navigate().Refresh();
-        }
-
-        public void Close()
-        {
-            _driver.Close();
-        }
-
-        public void Quit()
-        {
-            _driver.Quit();
-        }
-
-        public IWebElement FindElement(By by)
-        {
-            return _driver.FindElement(by);
-        }
-
-        ReadOnlyCollection<IWebElement> ISearchContext.FindElements(By by)
-        {
-            return _driver.FindElements(by);
-        }
-
-        public IOptions Manage()
-        {
-            return _driver.Manage();
-        }
-
-        public INavigation Navigate()
-        {
-            return _driver.Navigate();
-        }
-
-        public ITargetLocator SwitchTo()
-        {
-            return _driver.SwitchTo();
         }
 
         public void ExplicitWait(Func<IWebDriver, IWebElement> expectedCondition, string failureMessage)
@@ -147,7 +84,7 @@ namespace Kinopoisk
         /// <param name="element">Webelement dropdown element</param>
         /// <param name="value">Value t obe selected from dropdown</param>
         /// <param name="matchCondition">Match condition to select element</param>
-        public void Select(IWebElement element, string value, MatchCondition matchCondition = MatchCondition.Text) 
+        public void Select(IWebElement element, string value, MatchCondition matchCondition = MatchCondition.Text)
         {
             ExplicitWait(Wait.ExpectedConditions.ElementToBeClickable(element),
                 $"Elements {element.GetAttribute("id")} to be clickable");
@@ -160,7 +97,8 @@ namespace Kinopoisk
                 case MatchCondition.Value:
                     selectElement.SelectByValue(value);
                     break;
-                default: selectElement.SelectByText(value);
+                default:
+                    selectElement.SelectByText(value);
                     break;
             }
         }
@@ -248,7 +186,7 @@ namespace Kinopoisk
 
             try
             {
-                return isPresent =_driver.FindElements(condition).Count > 0;
+                return isPresent = _driver.FindElements(condition).Count > 0;
             }
             catch (WebDriverException)
             {

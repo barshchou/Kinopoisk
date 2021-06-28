@@ -1,45 +1,47 @@
-﻿using Kinopoisk.Core.Browser;
-using Kinopoisk.Core.Interfaces;
+﻿using Kinopoisk.Core.Driver;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Kinopoisk.Pages
 {
-    public class Profile_MoviesPage
+    public class Profile_MoviesPage : BasePage
     {
-        private readonly IBrowser _browser;
-
-        public Profile_MoviesPage(IBrowser browser)
+        public Profile_MoviesPage(IWebDriver driver, IWait<IWebDriver> wait) : base(driver, wait)
         {
-            _browser = browser;
-            _browser.Page.WaitUntilElementIsPresent(By.XPath("//li/span[contains(text(), 'Фильмы')]"));
+            WaitUntilElementIsPresent(By.XPath("//li/span[contains(text(), 'Фильмы')]"));
         }
 
-        private IWebElement contentItem(string contentName) => _browser.Page.FindElement(By.XPath($"//div/a[@class = 'name'][text() = '{contentName}']"));
-        private IWebElement selectAllTitlesCheckbox => _browser.Page.FindElement(By.CssSelector("#selectAllbox"));
-        private IWebElement removeSelectedButton => _browser.Page.FindElement(By.CssSelector("#delete_selected[value='удалить отмеченные фильмы']"));
+        public Profile_MoviesPage()
+        {
 
-        public bool IsContentAddedToFavorites(string contentName) => _browser.Page.IsElementPresent(By.XPath($"//div/a[@class = 'name'][text() = '{contentName}']"));
+        }
+
+        private IWebElement ContentItem(string contentName) => _driver.FindElement(By.XPath($"//div/a[@class = 'name'][text() = '{contentName}']"));
+        private IWebElement SelectAllTitlesCheckbox => _driver.FindElement(By.CssSelector("#selectAllbox"));
+        private IWebElement RemoveSelectedButton => _driver.FindElement(By.CssSelector("#delete_selected[value='удалить отмеченные фильмы']"));
+
+        public bool IsContentAddedToFavorites(string contentName) => IsElementPresent(By.XPath($"//div/a[@class = 'name'][text() = '{contentName}']"));
 
         public void RemoveAllFavourites()
         {
-            _browser.Page.MoveToElement(selectAllTitlesCheckbox);
-            _browser.Page.Click(selectAllTitlesCheckbox);
-            _browser.Page.Click(removeSelectedButton);
-            _browser.Page.SwitchTo().Alert().Accept();
+            MoveToElement(SelectAllTitlesCheckbox);
+            Click(SelectAllTitlesCheckbox);
+            Click(RemoveSelectedButton);
+            _driver.SwitchTo().Alert().Accept();
         }
 
-        public bool IsFavoritesPurged() => _browser.Page.WaitUntilElementIsPresent(By.XPath("//p[@class = 'emptyMessage']"));
+        public bool IsFavoritesPurged() => WaitUntilElementIsPresent(By.XPath("//p[@class = 'emptyMessage']"));
 
         public MediaContentPage OpenContenItem(string contentName)
         {
-            _browser.Page.Click(contentItem(contentName));
-            return new MediaContentPage(_browser);
+            Click(ContentItem(contentName));
+            return new MediaContentPage(_driver, _wait);
         }
 
         public HomePage OpenHomePage()
         {
-            _browser.Page.GoToUrl(BrowserConfig.BaseUrl);
-            return new HomePage(_browser);
+            _driver.Navigate().GoToUrl(BrowserConfig.BaseUrl);
+            return new HomePage(_driver, _wait);
         }
     }
 }

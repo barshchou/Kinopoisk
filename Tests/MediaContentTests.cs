@@ -1,4 +1,5 @@
-﻿using Kinopoisk.Core.Browser;
+﻿using Kinopoisk.Core;
+using Kinopoisk.Core.Driver;
 using NUnit.Framework;
 
 namespace Kinopoisk.Tests
