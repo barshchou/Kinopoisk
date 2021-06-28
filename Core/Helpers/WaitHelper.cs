@@ -1,10 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Kinopoisk.Core.Helpers
 {
@@ -40,21 +37,18 @@ namespace Kinopoisk.Core.Helpers
 
             while (true)
             {
-
                 if (condition()) { return; }
-
                 Thread.Sleep(sleepMilliseconds);
-
                 if (watch.ElapsedMilliseconds > timeoutMilliseconds)
                 {
                     if (failureMessage == null)
                     {
                         throw new TimeoutException(
-                            message: $"Waited for {timeoutMilliseconds} milliseconds without success");
+                            $"Waited for {timeoutMilliseconds} milliseconds without success");
                     }
 
                     throw new TimeoutException(
-                        message: $"Waited for {failureMessage} for {timeoutMilliseconds} without success");
+                        $"Waited for {failureMessage} for {timeoutMilliseconds} without success");
                 }
             }
         }

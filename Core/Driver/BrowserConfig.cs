@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Kinopoisk.Core.Enums;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 
-namespace Kinopoisk.Core.Browser
+namespace Kinopoisk.Core.Driver
 {
     public class BrowserConfig
     {

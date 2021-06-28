@@ -1,4 +1,4 @@
-﻿namespace Kinopoisk.Core
+﻿namespace Kinopoisk.Core.Enums
 {
     public enum MatchCondition
     {

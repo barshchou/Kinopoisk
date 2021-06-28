@@ -1,26 +1,28 @@
-﻿using Kinopoisk.Core.Interfaces;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Kinopoisk.Pages
 {
-    public class HomePage
+    public class HomePage : BasePage
     {
-        private readonly IBrowser _browser;
-
-        public HomePage(IBrowser browser)
+        public HomePage(IWebDriver driver, IWait<IWebDriver> wait) : base(driver, wait)
         {
-            _browser = browser;
-            _browser.Page.WaitUntilElementIsPresent(By.XPath("//div[@class = 'desktop-layout-with-sidebar__content']"));
+            WaitUntilElementIsPresent(By.XPath("//div[@class = 'desktop-layout-with-sidebar__content']"));
         }
 
-        private IWebElement loginButton => _browser.Page.FindElement(By.XPath("//button[contains(text(), 'Войти')]"));
-        private IWebElement logoutButton => _browser.Page.FindElement(By.XPath("//button[contains(text(), 'Выйти')]"));
-        private IWebElement userProfileMenu => _browser.Page.FindElement(By.XPath("//div[contains(@class, 'header-v4__user-bar')]/div/button"));
-        private IWebElement searchContentField => _browser.Page.FindElement(By.CssSelector("input[name='kp_query']"));
-        private IWebElement searchButton => _browser.Page.FindElement(By.XPath("//button[@type='submit']"));
-        private IWebElement profileSettingButton => _browser.Page.FindElement(By.XPath("//a[contains(text(), 'Настройки')]"));
-        private IWebElement advancedSearchButton => _browser.Page.FindElement(By.XPath("//a[@aria-label = 'advanced-search']"));
-        private IWebElement searchResultsSuggested(string contentName) => _browser.Page.FindElement(
+        public HomePage()
+        {
+
+        }
+
+        private IWebElement LoginButton => _driver.FindElement(By.XPath("//button[contains(text(), 'Войти')]"));
+        private IWebElement LogoutButton => _driver.FindElement(By.XPath("//button[contains(text(), 'Выйти')]"));
+        private IWebElement UserProfileMenu => _driver.FindElement(By.XPath("//div[contains(@class, 'header-v4__user-bar')]/div/button"));
+        private IWebElement SearchContentField => _driver.FindElement(By.CssSelector("input[name='kp_query']"));
+        private IWebElement SearchButton => _driver.FindElement(By.XPath("//button[@type='submit']"));
+        private IWebElement ProfileSettingButton => _driver.FindElement(By.XPath("//a[contains(text(), 'Настройки')]"));
+        private IWebElement AdvancedSearchButton => _driver.FindElement(By.XPath("//a[@aria-label = 'advanced-search']"));
+        private IWebElement searchResultsSuggested(string contentName) => _driver.FindElement(
             By.XPath($"//div/h4[text() = '{contentName}']"));
 
         public LoginPage OpenLoginPage()
@@ -29,16 +31,16 @@ namespace Kinopoisk.Pages
                 Logout();
 
             ClickLogin();
-            return new LoginPage(_browser);
+            return new LoginPage(_driver, _wait);
         }
 
         public SearchResultsPage SearchContent(string contentName)
         {
             Search(contentName);
-            return new SearchResultsPage(_browser);
+            return new SearchResultsPage(_driver, _wait);
         }
 
-        public void ClickLogin() => _browser.Page.Click(loginButton);
+        public void ClickLogin() => Click(LoginButton);
 
         /// <summary>
         /// Logout if already logged in
@@ -47,8 +49,8 @@ namespace Kinopoisk.Pages
         {
             if (IsUserLoggedIn())
             {
-                _browser.Page.MoveToElement(userProfileMenu);
-                _browser.Page.Click(logoutButton);
+                MoveToElement(UserProfileMenu);
+                Click(LogoutButton);
             }
         }
 
@@ -58,12 +60,12 @@ namespace Kinopoisk.Pages
         /// <returns></returns>
         public ProfilePage OpenProfilePage()
         {
-            _browser.Page.MoveToElement(userProfileMenu);
-            _browser.Page.Click(profileSettingButton);
-            return new ProfilePage(_browser);
+            MoveToElement(UserProfileMenu);
+            Click(ProfileSettingButton);
+            return new ProfilePage(_driver, _wait);
         }
 
-        public bool IsUserLoggedIn()  => _browser.Page.IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
+        public bool IsUserLoggedIn()  => IsElementPresent(By.XPath("//button[contains(text(), 'Выйти')]"));
 
         /// <summary>
         /// Search content from search field box
@@ -71,8 +73,8 @@ namespace Kinopoisk.Pages
         /// <param name="contentName"></param>
         public void Search(string contentName)
         {
-            _browser.Page.Type(contentName, searchContentField);
-            _browser.Page.Click(searchButton);
+            Type(contentName, SearchContentField);
+            Click(SearchButton);
         }
 
         /// <summary>
@@ -81,14 +83,14 @@ namespace Kinopoisk.Pages
         /// <param name="contentName"></param>
         public void SearchSuggestedContent(string contentName)
         {
-            _browser.Page.Type(contentName, searchContentField);
-            _browser.Page.Click(searchResultsSuggested(contentName));
+            Type(contentName, SearchContentField);
+            Click(searchResultsSuggested(contentName));
         }
 
         public SearchContentPage OpenSearchContentPage()
         {
-            _browser.Page.Click(advancedSearchButton);
-            return new SearchContentPage(_browser);
+            Click(AdvancedSearchButton);
+            return new SearchContentPage(_driver, _wait);
         }
     }
 }

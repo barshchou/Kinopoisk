@@ -1,4 +1,5 @@
-﻿using Kinopoisk.Core.Browser;
+﻿using Kinopoisk.Core;
+using Kinopoisk.Core.Driver;
 using Kinopoisk.Core.Helpers;
 using NUnit.Framework;
 
@@ -8,14 +9,16 @@ namespace Kinopoisk.Tests
     [Parallelizable]
     public class HomePageTests : TestBase
     {
+        const string CONTENTNAME = "Троя";
+
         [TestCase]
         public void SearchContentByNameTest()
         {
             var loginPage = _homePage.OpenLoginPage();
             var homePage = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
-            var searchResults = homePage.SearchContent("Троя");
+            var searchResults = homePage.SearchContent(CONTENTNAME);
 
-            Assert.IsTrue(searchResults.AreSearchResultsDisplayed("Троя"));
+            Assert.IsTrue(searchResults.AreSearchResultsDisplayed(CONTENTNAME));
         }
 
         [TestCase]
@@ -36,7 +39,7 @@ namespace Kinopoisk.Tests
             var homePage = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
             var searchResults = homePage.SearchContent("Troya");
 
-            Assert.True(searchResults.AreSearchResultsDisplayed("Троя"));
+            Assert.True(searchResults.AreSearchResultsDisplayed(CONTENTNAME));
         }
 
         [TestCase]
@@ -46,7 +49,7 @@ namespace Kinopoisk.Tests
             var homePage = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
             var searchResults = homePage.SearchContent("Nhjz");
 
-            Assert.True(searchResults.AreSearchResultsDisplayed("Троя"));
+            Assert.True(searchResults.AreSearchResultsDisplayed(CONTENTNAME));
         }
 
         [TestCase]

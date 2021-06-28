@@ -1,4 +1,4 @@
-﻿namespace Kinopoisk
+﻿namespace Kinopoisk.Core.Enums
 {
     public enum BrowserType
     {

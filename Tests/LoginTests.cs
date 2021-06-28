@@ -1,6 +1,6 @@
-using Kinopoisk.Core.Browser;
+using Kinopoisk.Core;
+using Kinopoisk.Core.Driver;
 using NUnit.Framework;
-using System;
 
 namespace Kinopoisk
 {
@@ -13,7 +13,7 @@ namespace Kinopoisk
         {
             var loginPage = _homePage.OpenLoginPage();
             var homePageLoggedIn = loginPage.OpenHomePage(BrowserConfig.Login, BrowserConfig.Password);
-            
+
             Assert.IsTrue(homePageLoggedIn.IsUserLoggedIn());
         }
 

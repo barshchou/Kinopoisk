@@ -1,31 +1,33 @@
-﻿using Kinopoisk.Core.Browser;
-using Kinopoisk.Core.Interfaces;
+﻿using Kinopoisk.Core.Driver;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Kinopoisk.Pages
 {
-    public class SearchResultsPage
+    public class SearchResultsPage : BasePage
     {
-        private readonly IBrowser _browser;
-
-        public SearchResultsPage(IBrowser browser)
+        public SearchResultsPage(IWebDriver driver, IWait<IWebDriver> wait) : base(driver, wait)
         {
-            _browser = browser;
-            _browser.Page.WaitUntilElementIsPresent(By.CssSelector("div.search_results_top"));
+            WaitUntilElementIsPresent(By.CssSelector("div.search_results_top"));
         }
 
-        private IWebElement searchResultsHeader => _browser.Page.FindElement(By.CssSelector("div.search_results_top"));
-        private IWebElement searchResultItem(string contentName) => _browser.Page.FindElement(By.XPath($"//p[@class = 'name']/a[text() = '{contentName}']"));
-        private IWebElement contentCountry => _browser.Page.FindElement(By.XPath("//div[@class = 'info']/span[2]"));
-        private IWebElement contentYear => _browser.Page.FindElement(By.XPath("//div[@class = 'info']/p/span[1]"));
+        public SearchResultsPage()
+        {
 
-        public bool AreSearchResultsDisplayed(string contentName) => _browser.Page.IsElementPresent(By.XPath($"//p[@class = 'name']/a[text() = '{contentName}']"));
-        public bool IsSearchResultsFilteredByCountry(string country) => _browser.Page.IsElementPresent(By.XPath($"//div[@class = 'info']/span[2][contains(text(), '{country}')]"));
+        }
+
+        private IWebElement SearchResultsHeader => _driver.FindElement(By.CssSelector("div.search_results_top"));
+        private IWebElement SearchResultItem(string contentName) => _driver.FindElement(By.XPath($"//p[@class = 'name']/a[text() = '{contentName}']"));
+        private IWebElement ContentCountry => _driver.FindElement(By.XPath("//div[@class = 'info']/span[2]"));
+        private IWebElement ContentYear => _driver.FindElement(By.XPath("//div[@class = 'info']/p/span[1]"));
+
+        public bool AreSearchResultsDisplayed(string contentName) => IsElementPresent(By.XPath($"//p[@class = 'name']/a[text() = '{contentName}']"));
+        public bool IsSearchResultsFilteredByCountry(string country) => IsElementPresent(By.XPath($"//div[@class = 'info']/span[2][contains(text(), '{country}')]"));
         public bool IsSearchResultsFilteredByYear(string yearFrom, string yearTo) 
         {
             var result = false;
-            if (int.Parse(GetText(contentYear).Substring(0, 4)) > int.Parse(yearFrom) 
-                & int.Parse(GetText(contentYear).Substring(0, 4)) < int.Parse(yearTo)) 
+            if (int.Parse(GetText(ContentYear).Substring(0, 4)) > int.Parse(yearFrom) 
+                & int.Parse(GetText(ContentYear).Substring(0, 4)) < int.Parse(yearTo)) 
                 result = true;
             return result;
         }
@@ -34,14 +36,14 @@ namespace Kinopoisk.Pages
 
         public MediaContentPage OpenContentItem(string contentName)
         {
-            _browser.Page.Click(searchResultItem(contentName));
-            return new MediaContentPage(_browser);
+            Click(SearchResultItem(contentName));
+            return new MediaContentPage(_driver, _wait);
         }
 
         public HomePage OpenHomePage()
         {
-            _browser.Page.GoToUrl(BrowserConfig.BaseUrl);
-            return new HomePage(_browser);
+            _driver.Navigate().GoToUrl(BrowserConfig.BaseUrl);
+            return new HomePage(_driver, _wait);
         }
     }
 }
